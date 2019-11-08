@@ -78,7 +78,7 @@ export const removeUser = (req: Request, res: Response) => {
 }
 
 export const login = (req: Request, res: Response) => {
-  const { username, password } = req.body
+  const { username, password } = req.query
   UserModel.findOne({ username }).then(user => {
     if (!user) {
       ApiLogger.logger.info(
@@ -96,7 +96,7 @@ export const login = (req: Request, res: Response) => {
         },
         process.env.JWT
       )
-      return res.json({ token })
+      return res.json({ token, user })
     } else {
       ApiLogger.logger.info(
         `[GET] [/users/login] user not authorized ${username}`

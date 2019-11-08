@@ -10,10 +10,11 @@ chai.use(chaiHttp)
 const expect = chai.expect
 
 const user = {
+  _id: null,
   username: 'xxx',
   firstName: 'yyy',
   lastName: 'zzz',
-  email: 'xyz@email.com',
+  email: 'asasdd@email.com',
   password: 'xyz123',
   phone: '5555555',
   userStatus: 1,
@@ -22,23 +23,23 @@ const user = {
 let token
 
 describe('userRoute', () => {
-  before(async done => {
+  before(async () => {
     await expect(UserModel.modelName).to.be.equal('User')
-    await UserModel.collection.drop()
+    // await UserModel.collection.drop()
     const newUser = new UserModel(user)
-    console.log(newUser)
     newUser.password = hashSync(newUser.password, +(process.env.SALT as string))
-    await newUser.save((err, createdUser) => {
-      user['_id'] = createdUser._id
-      done()
+    await newUser.save().then(createdUser => {
+      user._id = createdUser._id
+      // done()
     })
   })
 
   it('should be able to login', () => {
     return chai
       .request(app)
-      .get(`/users/login?username=${user.username}&password=${user.password}`)
+      .get(`/login?username=${user.username}&password=${user.password}`)
       .then(res => {
+        // console.log(res)
         expect(res.status).to.be.equal(200)
         token = res.body.token
       })
@@ -55,15 +56,26 @@ describe('userRoute', () => {
   })
 
   it('should create a new user and retrieve it back', () => {
-    user.email = 'unique_email@email.com'
+    const tempUser = {
+      username: 'VLXX',
+      firstName: 'yyy',
+      lastName: 'zzz',
+      email: 'unique_emadasdasi323@email.com',
+      password: 'xyz123',
+      phone: '5555555',
+      userStatus: 1,
+    }
+    const newUser = new UserModel(tempUser)
+    newUser.password = hashSync(newUser.password, +(process.env.SALT as string))
+
     return chai
       .request(app)
       .post('/users')
       .set('Authorization', `Bearer ${token}`)
-      .send(user)
+      .send(newUser)
       .then(res => {
         expect(res.status).to.be.equal(201)
-        expect(res.body.username).to.be.equal(user.username)
+        expect(res.body.username).to.be.equal(tempUser.username)
       })
   })
 
@@ -78,22 +90,28 @@ describe('userRoute', () => {
       })
   })
 
-  it('should updated the user John', () => {
-    user.username = 'John_Updated'
-    user.firstName = 'John Updated'
-    user.lastName = 'Doe Updated'
-    user.email = 'John@myemail_updated.com'
-    user.password = 'password Updated'
-    user.phone = '3333333'
-    user.userStatus = 12
+  it('should updated the user 123 - have specific email', () => {
+    const temp = {
+      username: '456',
+      firstName: 'Ahihi',
+      lastName: 'xxx',
+      email: 'a@gmailxxx.com',
+      password: 'password Updated',
+      phone: '3333333',
+      userStatus: 12,
+    }
+    temp.password = hashSync(temp.password, +(process.env.SALT as string))
+    UserModel.findOne({ email: 'a@gmail.com' }).then(foundUser => {
+      UserModel.findByIdAndUpdate(foundUser._id, temp)
+    })
 
     return chai
       .request(app)
-      .patch(`/users/John`)
+      .patch(`/users/456`)
       .set('Authorization', `Bearer ${token}`)
       .send(user)
       .then(res => {
-        expect(res.status).to.be.equal(204)
+        expect(res.status).to.be.equal(200)
       })
   })
 

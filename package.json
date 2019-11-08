@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env PORT=3000 NODE_ENV=dev tsnd --respawn --transpileOnly ./src/server.ts",
-    "test": "cross-env NODE_ENV=test mocha --reporter spec ts:ts-node/register test/**/*.spec.ts "
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.spec.ts --exit"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.1.1",
