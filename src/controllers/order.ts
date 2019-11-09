@@ -16,14 +16,10 @@ export const getOrder = (req: Request, res: Response) => {
           `[GET] [/store/orders/:${order._id}] Order ${id} not found.`
         )
       }
-      order = halson(order.toJSON()).addLink(
-        'self',
-        `/store/orders/${order.id}`
-      )
-      return formatOutput(res, order, 200, 'order')
+      return formatOutput(res, order, 200)
     })
     .catch(err => {
-      return formatOutput(res, err.message, 404)
+      return formatOutput(res, err, 404)
     })
 }
 
