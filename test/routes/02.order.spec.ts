@@ -3,13 +3,14 @@ import chaiHttp = require('chai-http')
 import 'mocha'
 import app from '../../src/app'
 import { OrderModel } from '../../src/schemas/order'
+import { UserModel } from '../../src/schemas/User'
 
 chai.use(chaiHttp)
 
 const expect = chai.expect
 
 describe('orderRoute', () => {
-  const order = {
+  let order = {
     userId: 20,
     quantity: 1,
     shipDate: new Date(),
@@ -28,7 +29,7 @@ describe('orderRoute', () => {
   it('should be able to login and get the token to be used on orders requests', async () => {
     return chai
       .request(app)
-      .get('/users/login?username=xxx&password=xyz123')
+      .get('/login?username=xxx&password=xyz123')
       .then(res => {
         expect(res.status).to.be.equal(200)
         token = res.body.token
@@ -55,30 +56,34 @@ describe('orderRoute', () => {
       phone: '5555555',
       userStatus: 1,
     }
-    return chai
-      .request(app)
-      .post('/users')
-      .set('Authorization', `Bearer ${token}`)
-      .send(user)
-      .then(res => {
-        expect(res.status).to.be.equal(201)
-        expect(res.body.username).to.be.equal(user.username)
-        order.userId = res.body._id
-      })
+    UserModel.create(user).then(createdUser => {
+      return chai
+        .request(app)
+        .post('/users')
+        .set('Authorization', `Bearer ${token}`)
+        .send(createdUser)
+        .then(res => {
+          expect(res.status).to.be.equal(201)
+          expect(res.body.username).to.be.equal(user.username)
+          order.userId = res.body._id
+        })
+    })
   })
 
   it('should create a new order and retrieve it back', async () => {
-    return chai
-      .request(app)
-      .post(`/store/orders`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(order)
-      .then(res => {
-        expect(res.status).to.be.equal(201)
-        expect(res.body.userId).to.be.equal(order.userId)
-        expect(res.body.complete).to.be.equal(false)
-        orderIdCreated = res.body._id
-      })
+    OrderModel.create(order).then(createdOrder => {
+      return chai
+        .request(app)
+        .post(`/store/orders`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(createdOrder)
+        .then(res => {
+          expect(res.status).to.be.equal(201)
+          expect(res.body.userId).to.be.equal(order.userId)
+          expect(res.body.complete).to.be.equal(false)
+          orderIdCreated = res.body._id
+        })
+    })
   })
   it('should return the order created on the step before', async () => {
     return chai
@@ -133,7 +138,7 @@ describe('orderRoute', () => {
   it('should return 404 when it is trying to remove an order because the order does not exist', async () => {
     return chai
       .request(app)
-      .del(`/store/orders/${orderIdCreated}`)
+      .del(`/store/orders/vlozDellCoDau`)
       .set('Authorization', `Bearer ${token}`)
       .then(res => {
         expect(res.status).to.be.equal(404)
