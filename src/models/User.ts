@@ -1,12 +1,12 @@
 'use strict'
 
 export default interface User {
-  id: Number
-  firstName: String
-  lastName: String
-  email: String
-  password: String
-  phone: String
-  userStatus: Number
-  username: String
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  phone: string
+  userStatus: number
+  username: string
 }

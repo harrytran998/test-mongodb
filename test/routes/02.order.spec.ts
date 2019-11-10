@@ -10,7 +10,7 @@ chai.use(chaiHttp)
 const expect = chai.expect
 
 describe('orderRoute', () => {
-  let order = {
+  const order = {
     userId: 20,
     quantity: 1,
     shipDate: new Date(),

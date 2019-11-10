@@ -1,10 +1,10 @@
 import { OrderStatus } from '../constant/ModelsStatus'
 
 export default interface Order {
-  id: Number
-  userId: Number
-  quantity: Number
+  id: number
+  userId: number
+  quantity: number
   shipDate: Date
   status: OrderStatus
-  complete: Boolean
+  complete: boolean
 }

@@ -9,7 +9,7 @@ chai.use(chaiHttp)
 
 const expect = chai.expect
 
-let user = {
+const user = {
   _id: null,
   username: 'zxcz',
   firstName: 'yyy',

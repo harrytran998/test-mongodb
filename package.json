@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env PORT=3000 NODE_ENV=dev tsnd --respawn --transpileOnly ./src/server.ts",
-    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.spec.ts --exit"
+    "test": "cross-env NODE_ENV=test mocha -r ts-node/register test/**/*.spec.ts --exit",
+    "lint": "eslint . --ext .ts --ignore-path .gitignore"
   },
   "dependencies": {
     "@google-cloud/storage": "^4.1.1",
@@ -31,6 +32,8 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.1",
     "@types/chai": "^4.2.4",
@@ -48,15 +51,41 @@
     "@types/passport-jwt": "^3.0.2",
     "@types/passport-local": "^1.0.33",
     "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
     "chai": "^4.2.0",
     "cross-env": "^6.0.3",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
     "mocha": "^6.2.2",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
     "rimraf": "^3.0.0",
     "ts-node": "^8.4.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslint": "^6.0.0-beta0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.6.4"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "yarn lint --fix",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "pretty-quick --staged",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   },
   "engines": {
     "node": ">=8.0.0"
