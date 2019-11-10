@@ -1,0 +1,36 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+  "rules": {
+    "camelcase": "off",
+    "no-undef": "off",
+    "no-unexpected-multiline": "error",
+    "sort-keys": "off",
+    "no-console": "off",
+    "no-shadow": "off",
+    "no-empty": "off",
+    "one-var": "off",
+    "no-bitwise": "off",
+    "@typescript-eslint/no-require-imports": "off",
+    "@typescript-eslint/prefer-interface": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/no-var-requires": "error"
+  }
+}
