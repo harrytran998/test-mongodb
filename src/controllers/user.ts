@@ -1,5 +1,4 @@
 import halson from 'halson'
-import { default as User } from '../models/User'
 import { formatOutput } from '../utility/orderApiUtility'
 import { Request, Response } from 'express'
 import { UserModel } from '../schemas/User'
@@ -71,7 +70,10 @@ export const removeUser = (req: Request, res: Response) => {
       return res.status(404).send()
     }
 
-    user.remove(error => {
+    user.remove(err => {
+      if (err) {
+        return formatOutput(res, err.message, 500)
+      }
       res.status(200).send('Remove successfully')
     })
   })
