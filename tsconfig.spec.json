@@ -4,8 +4,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "lib": ["dom", "es6"],
-    "target": "es6", //default is es5
+    "lib": ["dom", "es6", "esnext"],
+    "target": "esnext", //default is es5
     "module": "commonjs", //CommonJs style module in output
     "outDir": "dist", //change the output directory
     "resolveJsonModule": true //to import out json database
