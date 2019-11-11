@@ -7,7 +7,7 @@ export const OrderStatus = {
 }
 
 // export interface OrderModel extends Order, Document {}
-type OrderModel = Order & Document // = above
+type OrderModels = Order & Document // = above
 
 export const OrderSchema: Schema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -21,7 +21,7 @@ export const OrderSchema: Schema = new Schema({
   complete: Boolean,
 })
 
-export const OrderModel: Model<OrderModel> = model<OrderModel>(
+export const OrderModel: Model<OrderModels> = model<OrderModels>(
   'Order',
   OrderSchema
 )
